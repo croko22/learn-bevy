@@ -17,13 +17,17 @@ impl Plugin for GamePlugin {
         app.add_state::<SimulationState>()
             //Events
             .add_event::<GameOver>()
+            //On Enter State
+            .add_system(pause_simulation.in_schedule(OnEnter(AppState::Game)))
             //Plugins
             .add_plugin(enemy::EnemyPlugin)
             .add_plugin(player::PlayerPlugin)
             .add_plugin(score::ScorePlugin)
             .add_plugin(star::StarPlugin)
             //Systems
-            .add_system(toggle_simulation.run_if(in_state(AppState::Game)));
+            .add_system(toggle_simulation.run_if(in_state(AppState::Game)))
+            //On Exit State
+            .add_system(resume_simulation.in_schedule(OnExit(AppState::Game)));
     }
 }
 
